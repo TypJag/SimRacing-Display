@@ -10,10 +10,14 @@ const barSpacing = 7
 
 const Container = styled.div`
   width: 20px;
-  height: 100%;
+  height: calc(100% - 2px);
   background-color: #000;
   display: flex;
   flex-direction: column;
+
+  border-width: 1px;
+  border-style: solid;
+  border-color: #fff;
 `
 
 const Bar = styled.div`
