@@ -1,42 +1,42 @@
-import {Parser} from 'binary-parser';
+import { Parser } from 'binary-parser'
 
-import {EVENT_CODES} from '../../constants';
-import {F1Parser} from '../F1Parser';
+import { EVENT_CODES } from '../../constants'
+import { F1Parser } from '../F1Parser'
 
-import {PacketHeaderParser} from '../PacketHeaderParser';
-import {PacketEventData} from '../../types/event';
+import { PacketHeaderParser } from '../PacketHeaderParser'
+import { PacketEventData } from '../../types/event'
 
 export class FastestLapParser extends F1Parser {
-  constructor() {
-    super();
-    this.endianess('little').uint8('vehicleIdx').floatle('lapTime');
+  constructor () {
+    super()
+    this.endianess('little').uint8('vehicleIdx').floatle('lapTime')
   }
 }
 
 export class RetirementParser extends F1Parser {
-  constructor() {
-    super();
-    this.endianess('little').uint8('vehicleIdx');
+  constructor () {
+    super()
+    this.endianess('little').uint8('vehicleIdx')
   }
 }
 
 export class TeamMateInPitsParser extends F1Parser {
-  constructor() {
-    super();
-    this.endianess('little').uint8('vehicleIdx');
+  constructor () {
+    super()
+    this.endianess('little').uint8('vehicleIdx')
   }
 }
 
 export class RaceWinnerParser extends F1Parser {
-  constructor() {
-    super();
-    this.endianess('little').uint8('vehicleIdx');
+  constructor () {
+    super()
+    this.endianess('little').uint8('vehicleIdx')
   }
 }
 
 export class PenaltyParser extends F1Parser {
-  constructor() {
-    super();
+  constructor () {
+    super()
 
     this.endianess('little')
       .uint8('penaltyType')
@@ -45,59 +45,59 @@ export class PenaltyParser extends F1Parser {
       .uint8('otherVehicleIdx')
       .uint8('time')
       .uint8('lapNum')
-      .uint8('placesGained');
+      .uint8('placesGained')
   }
 }
 
 export class SpeedTrapParser extends F1Parser {
-  constructor() {
-    super();
+  constructor () {
+    super()
     this.endianess('little')
       .uint8('vehicleIdx')
       .floatle('speed')
       .uint8('overallFastestInSession')
-      .uint8('driverFastestInSession');
+      .uint8('driverFastestInSession')
   }
 }
 
 export class StartLightsParser extends F1Parser {
-  constructor() {
-    super();
-    this.endianess('little').uint8('numLights');
+  constructor () {
+    super()
+    this.endianess('little').uint8('numLights')
   }
 }
 
 export class StartLightsOutParser extends F1Parser {
-  constructor() {
-    super();
-    this.endianess('little').uint8('LightsOut');
+  constructor () {
+    super()
+    this.endianess('little').uint8('LightsOut')
   }
 }
 
 export class DriveThroughPenaltyServedParser extends F1Parser {
-  constructor() {
-    super();
-    this.endianess('little').uint8('vehicleIdx');
+  constructor () {
+    super()
+    this.endianess('little').uint8('vehicleIdx')
   }
 }
 
 export class StopGoPenaltyServedParser extends F1Parser {
-  constructor() {
-    super();
-    this.endianess('little').uint8('vehicleIdx');
+  constructor () {
+    super()
+    this.endianess('little').uint8('vehicleIdx')
   }
 }
 
 export class FlashbackParser extends F1Parser {
-  constructor() {
-    super();
-    this.endianess('little').uint32le('flashbackFrameIdentifier').floatle('flashbackSessionTime');
+  constructor () {
+    super()
+    this.endianess('little').uint32le('flashbackFrameIdentifier').floatle('flashbackSessionTime')
   }
 }
 
 export class ButtonsParser extends F1Parser {
-  constructor(binaryButtonFlags: boolean) {
-    super();
+  constructor (binaryButtonFlags: boolean) {
+    super()
 
     if (binaryButtonFlags) {
       this.endianess('little')
@@ -135,63 +135,63 @@ export class ButtonsParser extends F1Parser {
         .bit1('D_Pad_Left')
         .bit1('D_Pad_Right')
         .bit1('D_Pad_Up')
-        .bit1('D_Pad_Down');
+        .bit1('D_Pad_Down')
     } else {
-      this.endianess('little').uint32le('m_buttonStatus');
+      this.endianess('little').uint32le('m_buttonStatus')
     }
   }
 }
 
 export class PacketEventDataParser extends F1Parser {
-  data: PacketEventData;
+  data: PacketEventData
 
-  constructor(buffer: Buffer, bigintEnabled: boolean, binaryButtonFlags: boolean) {
-    super();
+  constructor (buffer: Buffer, bigintEnabled: boolean, binaryButtonFlags: boolean) {
+    super()
 
     this.endianess('little')
-      .nest('m_header', {type: new PacketHeaderParser(bigintEnabled)})
-      .string('m_eventStringCode', {length: 4})
-      .unpack2021Format(buffer, bigintEnabled, binaryButtonFlags);
+      .nest('m_header', { type: new PacketHeaderParser(bigintEnabled) })
+      .string('m_eventStringCode', { length: 4 })
+      .unpack2021Format(buffer, bigintEnabled, binaryButtonFlags)
 
-    this.data = this.fromBuffer(buffer) as PacketEventData;
+    this.data = this.fromBuffer(buffer) as PacketEventData
   }
 
-  unpack2021Format = (buffer: Buffer, bigintEnabled: boolean, binaryButtonFlags: boolean) => {
-    const eventStringCode = this.getEventStringCode(buffer, bigintEnabled);
+  unpack2021Format = (buffer: Buffer, bigintEnabled: boolean, binaryButtonFlags: boolean): void => {
+    const eventStringCode = this.getEventStringCode(buffer, bigintEnabled)
 
     if (eventStringCode === EVENT_CODES.FastestLap) {
-      this.nest('FastestLap', {type: new FastestLapParser()});
+      this.nest('FastestLap', { type: new FastestLapParser() })
     } else if (eventStringCode === EVENT_CODES.Retirement) {
-      this.nest('Retirement', {type: new RetirementParser()});
+      this.nest('Retirement', { type: new RetirementParser() })
     } else if (eventStringCode === EVENT_CODES.TeammateInPits) {
-      this.nest('TeamMateInPits', {type: new TeamMateInPitsParser()});
+      this.nest('TeamMateInPits', { type: new TeamMateInPitsParser() })
     } else if (eventStringCode === EVENT_CODES.RaceWinner) {
-      this.nest('RaceWinner', {type: new RaceWinnerParser()});
+      this.nest('RaceWinner', { type: new RaceWinnerParser() })
     } else if (eventStringCode === EVENT_CODES.PenaltyIssued) {
-      this.nest('Penalty', {type: new PenaltyParser()});
+      this.nest('Penalty', { type: new PenaltyParser() })
     } else if (eventStringCode === EVENT_CODES.SpeedTrapTriggered) {
-      this.nest('SpeedTrap', {type: new SpeedTrapParser()});
+      this.nest('SpeedTrap', { type: new SpeedTrapParser() })
     } else if (eventStringCode === EVENT_CODES.StartLights) {
-      this.nest('StartLights', {type: new StartLightsParser()});
+      this.nest('StartLights', { type: new StartLightsParser() })
     } else if (eventStringCode === EVENT_CODES.LightsOut) {
-      this.nest('StartLightsOut', {type: new StartLightsOutParser()});
+      this.nest('StartLightsOut', { type: new StartLightsOutParser() })
     } else if (eventStringCode === EVENT_CODES.DriveThroughServed) {
-      this.nest('DriveThroughPenaltyServed', {type: new DriveThroughPenaltyServedParser()});
+      this.nest('DriveThroughPenaltyServed', { type: new DriveThroughPenaltyServedParser() })
     } else if (eventStringCode === EVENT_CODES.StopGoServed) {
-      this.nest('StopGoPenaltyServed', {type: new StopGoPenaltyServedParser()});
+      this.nest('StopGoPenaltyServed', { type: new StopGoPenaltyServedParser() })
     } else if (eventStringCode === EVENT_CODES.Flashback) {
-      this.nest('Flashback', {type: new FlashbackParser()});
+      this.nest('Flashback', { type: new FlashbackParser() })
     } else if (eventStringCode === EVENT_CODES.ButtonStatus) {
-      this.nest('Buttons', {type: new ButtonsParser(binaryButtonFlags)});
+      this.nest('Buttons', { type: new ButtonsParser(binaryButtonFlags) })
     }
-  };
+  }
 
   getEventStringCode = (buffer: Buffer, bigintEnabled: boolean) => {
     const headerParser = new Parser()
       .endianess('little')
-      .nest('m_header', {type: new PacketHeaderParser(bigintEnabled)})
-      .string('m_eventStringCode', {length: 4});
-    const {m_eventStringCode} = headerParser.parse(buffer);
-    return m_eventStringCode;
-  };
+      .nest('m_header', { type: new PacketHeaderParser(bigintEnabled) })
+      .string('m_eventStringCode', { length: 4 })
+    const { m_eventStringCode } = headerParser.parse(buffer)
+    return m_eventStringCode
+  }
 }

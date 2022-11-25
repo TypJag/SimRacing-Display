@@ -77,7 +77,7 @@ export type F1_2021_UDP_Parser =
   | typeof PacketSessionHistoryDataParser
   | null
 
-export {
+export type {
   PacketMotionData,
   PacketSessionData,
   PacketLapData,
