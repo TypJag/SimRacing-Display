@@ -1,5 +1,6 @@
 import styled from 'styled-components'
 import BatterBar from '../components/BatteryBar'
+import DeployMode from '../components/DeployMode'
 
 const Container = styled.div`
   display: flex;
@@ -46,7 +47,7 @@ const Display: React.FC = () => {
   return (
     <Container>
       <Header>
-        header
+        <DeployMode />
       </Header>
 
       <Row>
