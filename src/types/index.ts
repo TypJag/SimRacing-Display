@@ -1,3 +1,18 @@
+import { PacketHeader } from '../types/PacketHeader'
+
+import { PacketMotionData } from '../types/motion'
+import { PacketSessionData } from '../types/session'
+import { PacketLapData } from '../types/lapData'
+import { PacketEventData } from '../types/event'
+import { PacketParticipantsData } from '../types/participants'
+import { PacketCarSetupData } from '../types/carSetups'
+import { PacketCarTelemetryData } from '../types/carTelemetry'
+import { PacketCarStatusData } from '../types/carStatus'
+import { PacketFinalClassificationData } from '../types/finalClassification'
+import { PacketLobbyInfoData } from '../types/lobbyInfo'
+import { PacketCarDamageData } from '../types/carDamage'
+import { PacketSessionHistoryData } from '../types/sessionHistory'
+
 import {
   PacketCarDamageParser,
   PacketCarSetupDataParser,
@@ -10,26 +25,26 @@ import {
   PacketMotionDataParser,
   PacketParticipantsDataParser,
   PacketSessionDataParser,
-  PacketSessionHistoryDataParser,
-} from '../parsers';
+  PacketSessionHistoryDataParser
+} from '../parsers'
 
 export interface Options {
-  port?: number;
-  forwardAddresses?: Address[] | undefined;
-  bigintEnabled?: boolean;
-  skipParsing?: boolean;
-  address?: string;
-  binaryButtonFlags?: boolean;
+  port?: number
+  forwardAddresses?: Address[] | undefined
+  bigintEnabled?: boolean
+  skipParsing?: boolean
+  address?: string
+  binaryButtonFlags?: boolean
 }
 
 export interface Address {
-  port: number;
-  ip?: string;
+  port: number
+  ip?: string
 }
 
 export interface ParsedMessage {
-  packetID: string;
-  packetData: PacketDataParser;
+  packetID: string
+  packetData: PacketDataParser
 }
 
 export type PacketDataParser =
@@ -45,7 +60,7 @@ export type PacketDataParser =
   | PacketCarStatusDataParser
   | PacketFinalClassificationDataParser
   | PacketLobbyInfoDataParser
-  | null;
+  | null
 
 export type F1_2021_UDP_Parser =
   | typeof PacketCarDamageParser
@@ -60,22 +75,7 @@ export type F1_2021_UDP_Parser =
   | typeof PacketParticipantsDataParser
   | typeof PacketSessionDataParser
   | typeof PacketSessionHistoryDataParser
-  | null;
-
-import {PacketHeader} from '../types/PacketHeader';
-
-import {PacketMotionData} from '../types/motion';
-import {PacketSessionData} from '../types/session';
-import {PacketLapData} from '../types/lapData';
-import {PacketEventData} from '../types/event';
-import {PacketParticipantsData} from '../types/participants';
-import {PacketCarSetupData} from '../types/carSetups';
-import {PacketCarTelemetryData} from '../types/carTelemetry';
-import {PacketCarStatusData} from '../types/carStatus';
-import {PacketFinalClassificationData} from '../types/finalClassification';
-import {PacketLobbyInfoData} from '../types/lobbyInfo';
-import {PacketCarDamageData} from '../types/carDamage';
-import {PacketSessionHistoryData} from '../types/sessionHistory';
+  | null
 
 export {
   PacketMotionData,
@@ -90,8 +90,8 @@ export {
   PacketLobbyInfoData,
   PacketCarDamageData,
   PacketSessionHistoryData,
-  PacketHeader,
-};
+  PacketHeader
+}
 
 export type parsedPackageData =
   | PacketMotionData
@@ -106,4 +106,4 @@ export type parsedPackageData =
   | PacketLobbyInfoData
   | PacketCarDamageData
   | PacketSessionHistoryData
-  | PacketHeader;
+  | PacketHeader
