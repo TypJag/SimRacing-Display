@@ -3,34 +3,23 @@ import useCarStatus from '../hooks/useCarStatus'
 import styled from 'styled-components'
 
 const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-
   border-width: 1px;
   border-style: solid;
   border-color: #fff;
-  
 
+  display: flex;
   flex: 1;
   justify-content: center;
-  align-items: flex-start;
+  align-items: center;
 
   p {
-    margin-left: 10px;
     font-size: 20px;
     font-weight: bold;
     color: #fff;
   }
 `
 
-const descriptions = [
-  'None',
-  'Medium',
-  'Hotlap',
-  'Overtake'
-]
-
-const DeployMode: React.FC<{ style?: React.CSSProperties }> = ({ style }) => {
+const FuelMix: React.FC<{ style?: React.CSSProperties }> = ({ style }) => {
   const carIndex = useCarIndex()
   const carStatus = useCarStatus()
 
@@ -38,13 +27,13 @@ const DeployMode: React.FC<{ style?: React.CSSProperties }> = ({ style }) => {
     return <Container style={style} />
   }
 
-  const ersDeployMode = descriptions[carStatus[carIndex].m_ersDeployMode]
+  const fuelMix = carStatus[carIndex].m_fuelMix
 
   return (
     <Container style={style}>
-      <p>{ersDeployMode}</p>
+      <p>{fuelMix}</p>
     </Container>
   )
 }
 
-export default DeployMode
+export default FuelMix

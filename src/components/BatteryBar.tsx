@@ -1,15 +1,15 @@
-import React, { useEffect } from 'react'
-import { PacketCarStatusData } from '../types'
 import styled from 'styled-components'
-import { socket } from '../App'
 import useCarIndex from '../hooks/useCarIndex'
+import useCarStatus from '../hooks/useCarStatus'
 
-const batteryMaxCapacity = 4000000
+export const batteryMaxCapacity = 4000000
 const numberOfBars = 30
 const barSpacing = 7
 
+export const batteryBarWidth = 20
+
 const Container = styled.div`
-  width: 20px;
+  width: ${batteryBarWidth}px;
   height: calc(100% - 2px);
   background-color: #000;
   display: flex;
@@ -36,14 +36,14 @@ const Dot = styled.div`
 
 const BatterBar: React.FC = () => {
   const carIndex = useCarIndex()
-  const [batteryJoules, setBatteryJoules] = React.useState(batteryMaxCapacity / 2)
-  const batteryPercentage = batteryJoules / batteryMaxCapacity
+  const carStatus = useCarStatus()
 
-  useEffect(() => {
-    socket.on('carStatus', (data: PacketCarStatusData) => {
-      setBatteryJoules(data.m_carStatusData[carIndex].m_ersStoreEnergy)
-    })
-  }, [])
+  if (carStatus.length === 0) {
+    return <Container />
+  }
+
+  const batteryJoules = carStatus[carIndex].m_ersStoreEnergy
+  const batteryPercentage = batteryJoules / batteryMaxCapacity
 
   return (
     <Container>
